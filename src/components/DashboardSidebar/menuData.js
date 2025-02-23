@@ -5,10 +5,7 @@ import { FaUnity } from "react-icons/fa";
 import { CgAttribution } from "react-icons/cg";
 import { HiBars3 } from "react-icons/hi2";
 import {
-  MdOutlineProductionQuantityLimits,
-  MdBrandingWatermark,
   MdSettingsAccessibility,
-  MdOutlineCategory,
 } from "react-icons/md";
 export const menuData = [
   {
@@ -27,36 +24,4 @@ export const menuData = [
     path: "/dashboard/food",
   },
 
-
-  {
-    title: "Product Variant",
-    icon: <RiProductHuntLine />,
-    childrens: [
-      {
-        title: "Color",
-        icon: <IoColorPaletteOutline />,
-        path: "/dashboard/color",
-      },
-      {
-        title: "Unit",
-        icon: <FaUnity />,
-        path: "/dashboard/unit",
-      },
-      {
-        title: "Attribute",
-        icon: <CgAttribution />,
-        path: "/dashboard/attribute",
-      },
-      {
-        title: "Product Variant",
-        icon: <RiProductHuntLine />,
-        path: "/dashboard/product-variant",
-      },
-    ],
-  },
-  {
-    title: "WebSetting",
-    icon: <MdSettingsAccessibility />,
-    path: "/dashboard/web-setting",
-  },
 ];

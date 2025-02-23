@@ -103,10 +103,9 @@ const CreateCategory = () => {
             name="singleSelect"
             control={control}
             options={categories}
-            // rules={{ required: "Category selection is required" }}
-            // onSelected={(selected) =>
-            //   setValue("category_id", selected?.category_id)
-            // }
+            onSelected={(selected) =>
+              setValue("category_id", selected?.category_id)
+            }
             placeholder="Select a category "
             error={errors.singleSelect?.message}
             label="Choose Parent category *"

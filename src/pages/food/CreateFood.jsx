@@ -59,11 +59,17 @@ const CreateFood = () => {
   }, [fetchCategory]);
 
   const onFormSubmit = async (data) => {
-    console.log("data".data);
 
+
+    const payload = {
+      ...data,
+      status: data.status ? 1 : 0, // true হলে 1, না হলে 0
+    };
+
+    console.log("payload", payload);
     try {
       setLoading(true);
-      const response = await NetworkServices.Food.store(data);
+      const response = await NetworkServices.Food.store(payload);
       console.log("objecttt", response);
       if (response && response.status === 200) {
         navigate("/dashboard/food");
@@ -86,10 +92,10 @@ const CreateFood = () => {
     );
   }
   const propsData = {
-    pageTitle: " Create Category ",
+    pageTitle: " Create Food ",
     pageIcon: <IoMdCreate />,
     buttonName: "Food List",
-    buttonUrl: "/dashboard/category",
+    buttonUrl: "/dashboard/food",
     type: "list", // This indicates the page type for the button
   };
   return (
@@ -98,71 +104,109 @@ const CreateFood = () => {
 
       <form
         onSubmit={handleSubmit(onFormSubmit)}
-        className="mx-auto p-4 border border-gray-200 rounded-lg"
+        className="mx-auto p-4 border border-gray-200 rounded-lg "
       >
-        <div className="mb-4">
-          <SingleSelect
-            name="category"
-            control={control}
-            options={categories}
-            // rules={{ required: "Category selection is required" }}
-            // onSelected={(selected) =>
-            //   setValue("category_id", selected?.category_id)
-            // }
-            placeholder="Select a category "
-            error={errors.category?.message}
-            label="Choose Parent category *"
-            isClearable={true}
-            // error={errors} // Pass an error message if validation fails
-          />
-        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="mt-4">
+            <SingleSelect
+              name="categories"
+              control={control}
+              options={categories}
+              rules={{ required: "Category selection is required" }}
+              onSelected={(selected) =>
+                setValue("category_id", selected?.category_id)
+              }
+              placeholder="Select a category "
+              error={errors.category?.message}
+              label="Choose category *"
+              isClearable={true}
+              // error={errors} // Pass an error message if validation fails
+            />
+          </div>
 
-        {/* Total Questions */}
-        <div className="mb-4">
-          <TextInput
-            name="cook_name"
-            control={control}
-            label="Cook Name *"
-            type="text"
-            placeholder="Create Cook"
-            rules={{ required: "Category is required" }} // Validation rule
-            error={errors.category_name?.message} // Show error message
-          />
-        </div>
-        {/* price */}
-        <div className="mb-4">
-          <TextInput
-            name="price"
-            control={control}
-            label="Price *"
-            type="text"
-            placeholder="Enter Price"
-            rules={{ required: "Price is required" }} // Validation rule
-            error={errors.price?.message} // Show error message
-          />
-        </div>
-        {/* rating */}
-        <div className="mb-4">
-          <SingleSelect
-            name="rating"
-            control={control}
-            options={Array.from({ length: 5 }, (_, i) => ({
-              label: (i + 1).toString(),
-              value: i + 1,
-            }))}
-            error={errors.rating?.message}
-            label="Choose Rating *"
-            isClearable={true}
-          />
-        </div>
-        <div className="mb-4">
-          <TextAreaInput
-            name="about_cook"
-            control={control}
-            label="About Cook *"
-            placeholder="Enter your comment"
-            error={errors?.about_cook?.message}
-          />
+          {/* Total Questions */}
+          <div className="mt-4">
+            <TextInput
+              name="cook_name"
+              control={control}
+              label="Cook Name *"
+              type="text"
+              placeholder="Create Cook"
+              rules={{ required: "Category is required" }} // Validation rule
+              error={errors.category_name?.message} // Show error message
+            />
+          </div>
+          {/* price */}
+          <div className="mt-4">
+            <TextInput
+              name="price"
+              control={control}
+              label="Price *"
+              type="number"
+              placeholder="Enter Price"
+              rules={{ required: "Price is required" }} // Validation rule
+              error={errors.price?.message} // Show error message
+            />
+          </div>
+          {/* price */}
+          <div className="mt-4">
+            <TextInput
+              name="cook_time"
+              control={control}
+              label="Cook Time *"
+              type="number"
+              placeholder="Enter Price"
+              rules={{ required: "Price is required" }} // Validation rule
+              error={errors.cook_time?.message} // Show error message
+            />
+          </div>
+          {/* rating */}
+          {/* <div className="mt-4">
+            <SingleSelect
+              name="rating"
+              control={control}
+              options={Array.from({ length: 5 }, (_, i) => ({
+                label: (i + 1).toString(),
+                value: i + 1,
+              }))}
+              error={errors.rating?.message}
+              label="Choose Rating *"
+              isClearable={true}
+            />
+          </div> */}
+          <div className="mt-4">
+            <SingleSelect
+              name="ratings"
+              control={control}
+              options={[
+                { label: 1, value: 1 },
+                { label: 2, value: 2 },
+                { label: 3, value: 3 },
+                { label: 4, value: 4 },
+                { label: 5, value: 5 },
+              ]}
+              onSelected={(selected) =>
+                setValue("rating", selected?.value)
+              }
+              placeholder="Select a Rating *"
+              error={errors.rating?.message}
+              label="Choose Rating *"
+              isClearable={true}
+            />
+          </div>
+
+          {/* discount price */}
+          <div className="mt-4">
+            <TextInput
+              name="discount_price"
+              control={control}
+              label="Discount Price *"
+              type="number"
+              placeholder="Enter discount Price"
+              rules={{ required: "discount Price is required" }} // Validation rule
+              error={errors.discount_price?.message} // Show error message
+            />
+          </div>
         </div>
 
         {/* Thumbnail Upload */}
@@ -177,20 +221,6 @@ const CreateFood = () => {
             error={errors.cook_image?.message}
           />
         </div>
-
-        {/* discount price */}
-        <div className="mb-4">
-          <TextInput
-            name="discount_price"
-            control={control}
-            label="Discount Price *"
-            type="text"
-            placeholder="Enter discount Price"
-            rules={{ required: "discount Price is required" }} // Validation rule
-            error={errors.discount_price?.message} // Show error message
-          />
-        </div>
-
         {/* multiple image Upload */}
         <div className="mt-4 cursor-pointer">
           <ImageUpload
@@ -203,20 +233,15 @@ const CreateFood = () => {
             error={errors.gallary_image?.message}
           />
         </div>
-
-        {/* discount price */}
-        <div className="mb-4">
-          <TextInput
-            name="discount_price"
+        <div className="mt-4">
+          <TextAreaInput
+            name="about_cook"
             control={control}
-            label="Discount Price *"
-            type="text"
-            placeholder="Enter discount Price"
-            rules={{ required: "discount Price is required" }} // Validation rule
-            error={errors.discount_price?.message} // Show error message
+            label="About Cook *"
+            placeholder="Enter your comment"
+            error={errors?.about_cook?.message}
           />
         </div>
-
         <div className="flex items-center gap-2 mt-4">
           <TextInput
             type="checkbox"

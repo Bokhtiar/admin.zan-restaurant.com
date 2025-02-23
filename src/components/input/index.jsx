@@ -377,9 +377,9 @@ export const ImageUpload = (props) => {
       }
     }; 
     return (
-      <div className="flex flex-col space-y-2">
+      <div className="flex flex-col space-y-1">
     
-        <span className="text-sm mb-1 text-gray-500 flex gap-1">
+        <span className="text-sm  text-gray-500 flex ">
           {props?.label}{" "}
           <span className="text-white">{props?.rules?.required ? "*" : ""}</span>
         </span>

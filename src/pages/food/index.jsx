@@ -15,18 +15,20 @@ import DataTable from "react-data-table-component";
 import { PageHeader } from "../../components/pageHeading/PageHeading";
 
 export const FoodList = () => {
-  const [categories, setCategories] = useState([]);
+  const [food, setFood] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log("categories", categories);
+
+  console.log("first",food)
+  
 
   // Fetch categories from API
-  const fetchCategory = useCallback(async () => {
+  const fetchfood = useCallback(async () => {
     setLoading(true)
     try {
-      const response = await NetworkServices.Category.index();
+      const response = await NetworkServices.Food.index();
       console.log(response);
       if (response && response.status === 200) {
-        setCategories(response?.data?.data || []);
+        setFood(response?.data?.data?.data || []);
       }
     } catch (error) {
       console.log(error);
@@ -36,23 +38,24 @@ export const FoodList = () => {
   }, []);
 
   useEffect(() => {
-    fetchCategory();
-  }, [fetchCategory]);
+    fetchfood();
+  }, [fetchfood]);
 
   // Handle single category deletion
   const destroy = (id) => {
+    console.log("iddd",id)
     confirmAlert({
       title: "Confirm Delete",
-      message: "Are you sure you want to delete this category?",
+      message: "Are you sure you want to delete this Food?",
       buttons: [
         {
           label: "Yes",
           onClick: async () => {
             try {
-              const response = await NetworkServices.Category.destroy(id);
+              const response = await NetworkServices.Food.destroy(id);
               if (response?.status === 200) {
-                Toastify.Info("Category deleted successfully.");
-                fetchCategory();
+                Toastify.Info("Food deleted successfully.");
+                fetchfood();
               }
             } catch (error) {
               networkErrorHandeller(error);
@@ -84,13 +87,13 @@ export const FoodList = () => {
 
     const columns = [
       {
-        name: "Thumbnail",
+        name: "Food Image",
         cell: (row) => (
           <img
             className="w-10 h-10 rounded-full border"
             src={
-              row?.category_image
-                ? `${process.env.REACT_APP_API_SERVER}${row?.category_image}`
+              row?.cook_image
+                ? `${process.env.REACT_APP_API_SERVER}${row?.cook_image}`
                 : ""
             }
             alt="images"
@@ -98,20 +101,32 @@ export const FoodList = () => {
         ),
       },
       {
-        name: "Category Name",
-        cell: (row) => row.category_name,
+        name: "Food Name",
+        cell: (row) => row?.cook_name,
+      },
+      {
+        name: "Discount Price",
+        cell: (row) => row?.discount_price,
+      },
+      {
+        name: "Food Price",
+        cell: (row) => row?.price,
+      },
+      {
+        name: "Rating",
+        cell: (row) => row?.rating,
       },
 
       {
         name: "Action",
         cell: (row) => (
           <div className="flex gap-2">
-            <Link to={`/dashboard/edit-category/${row?.category_id}`}>
+            <Link to={`/dashboard/edit-category/${row?.cook_id}`}>
               <FaEdit className="text-primary text-xl" />
             </Link>
             <MdDelete
               className="text-red-500 text-xl cursor-pointer"
-              onClick={() => destroy(row?.category_id)}
+              onClick={() => destroy(row?.cook_id)}
             />
           </div>
         ),
@@ -121,7 +136,7 @@ export const FoodList = () => {
   return (
     <>
       <PageHeader propsData={propsData} />
-      <DataTable columns={columns} data={categories} pagination />
+      <DataTable columns={columns} data={food} pagination />
     </>
   );
 };
