@@ -10,6 +10,10 @@ import EditCategory from "../pages/category/EditCategory"
 import {FoodList} from "../pages/food"
 import CreateFood from "../pages/food/CreateFood"
 import EditFood from "../pages/food/EditFood"
+import { ChefList } from "../pages/Chef"
+import CreateChef from "../pages/Chef/CreateChef"
+import EditChef from "../pages/Chef/EditChef"
+
 
 const appRoutes = [
     {
@@ -28,6 +32,10 @@ const appRoutes = [
             { path:"food", element: <FoodList /> },
             { path: "create-food", element: <CreateFood /> },
             { path: "edit-food/:foodId", element: <EditFood /> },
+            /** food */
+            { path:"chef", element: <ChefList/> },
+            { path: "create-chef", element: <CreateChef /> },
+            { path: "edit-chef/:chefId", element: <EditChef /> },
 
             // /** product */
             // { path: "product", element:  <Product /> },

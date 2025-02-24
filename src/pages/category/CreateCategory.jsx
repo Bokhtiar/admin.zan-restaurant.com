@@ -7,7 +7,7 @@ import { Toastify } from "../../components/toastify";
 
 import { useNavigate } from "react-router-dom";
 import { PageHeader } from "../../components/pageHeading/PageHeading";
-import { ImageUpload, SingleSelect, TextInput } from "../../components/input";
+import { ImageUpload, SingleSelect,  TextInput } from "../../components/input";
 import { networkErrorHandeller } from "../../utils/helper";
 import { SkeletonTable } from "../../components/loading/skeleton-table";
 
@@ -53,26 +53,64 @@ const CreateCategory = () => {
     fetchCategory();
   }, [fetchCategory]);
 
+  // const onFormSubmit = async (data) => {
+  //   console.log("data".data)
+  //   const result = data?.status ? "1" : "0";
+  //   const newObj = { ...data, status: result,parent_id:data?.singleSelect?.category_id};
+  //   console.log("object", newObj);
+  //   try {
+  //     setLoading(true);
+  //     const response = await NetworkServices.Category.store(newObj);
+  //     console.log("objecttt", response);
+  //     if (response && response.status === 200) {
+  //       navigate("/dashboard/category");
+  //       return Toastify.Success("Category Created.");
+  //     }
+  //   } catch (error) {
+  //     console.log("error", error);
+  //     networkErrorHandeller(error);
+  //   }
+  //   setLoading(false);
+  // };
   const onFormSubmit = async (data) => {
-    console.log("data".data)
-    const result = data?.status ? "1" : "0";
-    const newObj = { ...data, status: result,parent_id:data?.singleSelect?.category_id};
-    console.log("object", newObj);
+    console.log("Submitted Data:", data);
+  
     try {
       setLoading(true);
-      const response = await NetworkServices.Category.store(newObj);
-      console.log("objecttt", response);
+  
+      // Create FormData object
+      const formData = new FormData();
+      formData.append("category_name", data.category_name);
+      formData.append("status", data?.status ? "1" : "0");
+  
+      // Append parent_id if exists
+      if (data?.singleSelect?.category_id) {
+        formData.append("parent_id", data.singleSelect.category_id);
+      }
+  
+      // Append category image if exists
+      if (data?.category_image) {
+        formData.append("category_image", data.category_image);
+      }
+  
+      console.log("FormData Entries:", [...formData.entries()]); // Debugging log
+  
+      // Send data to API
+      const response = await NetworkServices.Category.store(formData);
+      console.log("API Response:", response);
+  
       if (response && response.status === 200) {
         navigate("/dashboard/category");
-        return Toastify.Success("Category Created.");
+        Toastify.Success("Category Created.");
       }
     } catch (error) {
-      console.log("error", error);
+      console.log("Error:", error);
       networkErrorHandeller(error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
-
+  
   if (loading) {
     return (
       <div className="text-center">
@@ -139,6 +177,7 @@ const CreateCategory = () => {
             error={errors.category_image?.message}
           />
         </div>
+
 
         <div className="flex items-center gap-2 mt-4">
           <TextInput

@@ -14,21 +14,19 @@ import { SkeletonTable } from "../../components/loading/skeleton-table";
 import DataTable from "react-data-table-component";
 import { PageHeader } from "../../components/pageHeading/PageHeading";
 
-export const FoodList = () => {
-  const [food, setFood] = useState([]);
+export const ChefList = () => {
+  const [chef, setChef] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  console.log("first",food)
-  
+  console.log("chef", chef);
 
   // Fetch categories from API
-  const fetchfood = useCallback(async () => {
+  const fetchChef = useCallback(async () => {
     setLoading(true)
     try {
-      const response = await NetworkServices.Food.index();
+      const response = await NetworkServices.Chef.index();
       console.log(response);
       if (response && response.status === 200) {
-        setFood(response?.data?.data?.data || []);
+        setChef(response?.data?.data || []);
       }
     } catch (error) {
       console.log(error);
@@ -38,24 +36,23 @@ export const FoodList = () => {
   }, []);
 
   useEffect(() => {
-    fetchfood();
-  }, [fetchfood]);
+    fetchChef();
+  }, [fetchChef]);
 
   // Handle single category deletion
   const destroy = (id) => {
-    console.log("iddd",id)
     confirmAlert({
       title: "Confirm Delete",
-      message: "Are you sure you want to delete this Food?",
+      message: "Are you sure you want to delete this category?",
       buttons: [
         {
           label: "Yes",
           onClick: async () => {
             try {
-              const response = await NetworkServices.Food.destroy(id);
+              const response = await NetworkServices.Chef.destroy(id);
               if (response?.status === 200) {
-                Toastify.Info("Food deleted successfully.");
-                fetchfood();
+                Toastify.Info("Category deleted successfully.");
+                fetchChef();
               }
             } catch (error) {
               networkErrorHandeller(error);
@@ -78,22 +75,22 @@ export const FoodList = () => {
   }
 
   const propsData = {
-    pageTitle: "Food List",
+    pageTitle: "Chef List",
     pageIcon: <IoIosList />,
-    buttonName: "Create New Food",
-    buttonUrl: "/dashboard/create-food",
+    buttonName: "Create New Chef",
+    buttonUrl: "/dashboard/create-chef",
     type: "add",
   };
 
     const columns = [
       {
-        name: "Food Image",
+        name: "Chef Image",
         cell: (row) => (
           <img
             className="w-10 h-10 rounded-full border"
             src={
-              row?.cook_image
-                ? `${process.env.REACT_APP_API_SERVER}${row?.cook_image}`
+              row?.chef_image
+                ? `${process.env.REACT_APP_API_SERVER}${row?.chef_image}`
                 : ""
             }
             alt="images"
@@ -101,32 +98,28 @@ export const FoodList = () => {
         ),
       },
       {
-        name: "Food Name",
-        cell: (row) => row?.cook_name,
+        name: "Chef Name",
+        cell: (row) => row.chef_name,
       },
       {
-        name: "Discount Price",
-        cell: (row) => row?.discount_price,
+        name: "Title",
+        cell: (row) => row?.title,
       },
       {
-        name: "Food Price",
-        cell: (row) => row?.price,
-      },
-      {
-        name: "Rating",
-        cell: (row) => row?.rating,
+        name: "Description",
+        cell: (row) => row?.description,
       },
 
       {
         name: "Action",
         cell: (row) => (
           <div className="flex gap-2">
-            <Link to={`/dashboard/edit-food/${row?.cook_id}`}>
+            <Link to={`/dashboard/edit-chef/${row?.chef_id}`}>
               <FaEdit className="text-primary text-xl" />
             </Link>
             <MdDelete
               className="text-red-500 text-xl cursor-pointer"
-              onClick={() => destroy(row?.cook_id)}
+              onClick={() => destroy(row?.chef_id)}
             />
           </div>
         ),
@@ -136,8 +129,10 @@ export const FoodList = () => {
   return (
     <>
       <PageHeader propsData={propsData} />
-      <DataTable columns={columns} data={food} pagination />
+      <DataTable columns={columns} data={chef} pagination />
     </>
   );
 };
+
+
 

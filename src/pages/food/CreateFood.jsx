@@ -58,22 +58,60 @@ const CreateFood = () => {
     fetchCategory();
   }, [fetchCategory]);
 
+  // const onFormSubmit = async (data) => {
+
+
+  //   const payload = {
+  //     ...data,
+  //     status: data.status ? 1 : 0, 
+  //   };
+
+  //   console.log("payload", payload);
+  //   try {
+  //     setLoading(true);
+  //     const response = await NetworkServices.Food.store(payload);
+  //     console.log("objecttt", response);
+  //     if (response && response.status === 200) {
+  //       navigate("/dashboard/food");
+  //       return Toastify.Success("Category Created.");
+  //     }
+  //   } catch (error) {
+  //     console.log("error", error);
+  //     networkErrorHandeller(error);
+  //   }
+  //   setLoading(false);
+  // };
+
   const onFormSubmit = async (data) => {
-
-
-    const payload = {
-      ...data,
-      status: data.status ? 1 : 0, // true হলে 1, না হলে 0
-    };
-
-    console.log("payload", payload);
+    const formData = new FormData();
+  
+    // `FormData` তে ডাটা যোগ করুন
+    formData.append("category_id", data.category_id);
+    formData.append("cook_name", data.cook_name);
+    formData.append("price", data.price);
+    formData.append("cook_time", data.cook_time);
+    formData.append("rating", data.rating);
+    formData.append("discount_price", data.discount_price);
+    formData.append("about_cook", data.about_cook);
+    formData.append("status", data.status ? "1" : "0");
+  
+    // `File` টাইপ ফিল্ড গুলো আলাদাভাবে অ্যাড করুন
+    if (data.cook_image) {
+      formData.append("cook_image", data.cook_image);
+    }
+  
+    if (data.gallary_image) {
+      formData.append("gallary_image", data.gallary_image);
+    }
+  
+    console.log("FormData:", [...formData]);
+  
     try {
       setLoading(true);
-      const response = await NetworkServices.Food.store(payload);
-      console.log("objecttt", response);
+      const response = await NetworkServices.Food.store(formData);
       if (response && response.status === 200) {
         navigate("/dashboard/food");
-        return Toastify.Success("Category Created.");
+        return Toastify.Success("Food Created Successfully.");
       }
     } catch (error) {
       console.log("error", error);
@@ -81,6 +119,7 @@ const CreateFood = () => {
     }
     setLoading(false);
   };
+  
 
   if (loading) {
     return (

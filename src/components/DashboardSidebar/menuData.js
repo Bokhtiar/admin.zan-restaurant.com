@@ -1,12 +1,8 @@
 import { RxDashboard } from "react-icons/rx";
-import { IoColorPaletteOutline } from "react-icons/io5";
-import { RiGalleryFill, RiProductHuntLine } from "react-icons/ri";
-import { FaUnity } from "react-icons/fa";
-import { CgAttribution } from "react-icons/cg";
+import { PiBowlFoodDuotone } from "react-icons/pi";
 import { HiBars3 } from "react-icons/hi2";
-import {
-  MdSettingsAccessibility,
-} from "react-icons/md";
+import { LuChefHat } from "react-icons/lu";
+
 export const menuData = [
   {
     title: "Dashboard",
@@ -20,8 +16,13 @@ export const menuData = [
   },
   {
     title: "Food",
-    icon: <HiBars3 />,
+    icon: <PiBowlFoodDuotone />,
     path: "/dashboard/food",
+  },
+  {
+    title: "Chef",
+    icon: <LuChefHat />,
+    path: "/dashboard/chef",
   },
 
 ];

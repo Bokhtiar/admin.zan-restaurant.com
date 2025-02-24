@@ -24,7 +24,7 @@ export const Login = () => {
 
   const onSubmit = async (data) => {
     console.log("data",data)
-    // navigate("/dashboard");
+    navigate("/dashboard");
     try {
         setLoading(true)
         const response = await NetworkServices.Authentication.login(data)
@@ -36,9 +36,35 @@ export const Login = () => {
         }
     } catch (error) {
         setLoading(false)
+        setToken("response.data.data.token");
         networkErrorHandeller(error)
     }
   };
+
+  // const onSubmit = async (data) => {
+  //   try {
+  //     setLoading(true);
+  
+  //     // FormData object creation
+  //     const formData = new FormData();
+  //     formData.append("email", data.email);
+  //     formData.append("password", data.password);
+  
+  //     // API call
+  //     const response = await NetworkServices.Authentication.login(formData);
+  
+  //     if (response.status === 200) {
+  //       setToken(response.data.data.token);
+  //       Toastify.Success("Login successfully done");
+  //       navigate("/dashboard");
+  //     }
+  //   } catch (error) {
+  //     networkErrorHandeller(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  
 
   useEffect(() => {
       if (getToken()) {

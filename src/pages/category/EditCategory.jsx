@@ -15,7 +15,7 @@ const EditCategory = () => {
   const [loading, setLoading] = useState(false);
   const [category, setCategory] = useState({});
 
-  console.log("categorycategory", category);
+  console.log("categorycategory", categoryId);
 
   const {
     
@@ -82,12 +82,12 @@ const EditCategory = () => {
   }, [categoryId]);
   // edit category api
   const onFormSubmit = async (data) => {
-    const result = data?.status ? "1" : "0";
+    
     const formData = new FormData();
     console.log("object", data);
-    data.parent_id && formData.append("parent_id", data.parent_id);
+    data.parent_id && formData.append("category_id", data.parent_id);
     formData.append("category_name", data.category_name);
-    formData.append("status",  result);
+    formData.append("status", data?.status ? "1" : "0");
     formData.append("_method", "PUT");
 
     if (data.category_image) {
@@ -134,7 +134,7 @@ const EditCategory = () => {
             options={categories}
             // rules={{ required: "Category selection is required" }}
             onSelected={(selected) =>
-              setValue("parent_id", selected?.category_id)
+              setValue("category_id", selected?.category_id)
             }
             placeholder={
               categories.find((item) => item?.category_id == category.parent_id)
