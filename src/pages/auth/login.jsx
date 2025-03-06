@@ -13,46 +13,64 @@ import { Toastify } from "../../components/toastify";
 export const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  // const [showValidation, setShowValidation] = useState(false);
+  // const [password, setPassword] = useState("");
 
+  // পাসওয়ার্ড ভ্যালিডেশন চেক
+  // const hasUpperCase = /[A-Z]/.test(password);
+  // const hasLowerCase = /[a-z]/.test(password);
+  // const hasNumber = /[0-9]/.test(password);
+  // const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  // const isLongEnough = password.length >= 8;
+
+  // console.log("password",password)
+
+  // const isPasswordValid = hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar && isLongEnough;
+
+  // useEffect(() => {
+  //   if (isPasswordValid) {
+  //     setShowValidation(false);
+  //   }
+  // }, [password]); 
+  
 
   const {
-    register,
     handleSubmit,
     control,
     formState: { errors },
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log("data",data)
-    navigate("/dashboard");
+    console.log("data", data);
+    // navigate("/dashboard");
     try {
-        setLoading(true)
-        const response = await NetworkServices.Authentication.login(data)
-        if (response.status === 200) {
-            setToken(response.data.data.token);
-            Toastify.Success("Login successfully done");
-            navigate("/dashboard");
-            setLoading(false)
-        }
+      setLoading(true);
+      const response = await NetworkServices.Authentication.login(data);
+      if (response.status === 200) {
+        setToken(response?.data?.data?.token);
+        Toastify.Success("Login successfully done");
+        navigate("/dashboard");
+        setLoading(false);
+      }
     } catch (error) {
-        setLoading(false)
-        setToken("response.data.data.token");
-        networkErrorHandeller(error)
+      setLoading(false);
+      setToken("response.data.data.token");
+      networkErrorHandeller(error);
     }
   };
 
   // const onSubmit = async (data) => {
   //   try {
   //     setLoading(true);
-  
+
   //     // FormData object creation
   //     const formData = new FormData();
   //     formData.append("email", data.email);
   //     formData.append("password", data.password);
-  
+
   //     // API call
   //     const response = await NetworkServices.Authentication.login(formData);
-  
+
   //     if (response.status === 200) {
   //       setToken(response.data.data.token);
   //       Toastify.Success("Login successfully done");
@@ -64,12 +82,11 @@ export const Login = () => {
   //     setLoading(false);
   //   }
   // };
-  
 
   useEffect(() => {
-      if (getToken()) {
-          navigate("/dashboard");
-      }
+    if (getToken()) {
+      navigate("/dashboard");
+    }
   }, [navigate]);
 
   return (
@@ -107,9 +124,11 @@ export const Login = () => {
                 placeholder="Enter Password"
                 rules={{ required: "Password is required" }} // Validation rule
                 error={errors?.exam_name?.message} // Show error message
+
               />
             </div>
-
+          
+    
             {/* submit button */}
             <div className="my-4 flex justify-center">
               <PrimaryButton loading={loading} name="Login">

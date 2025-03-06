@@ -52,6 +52,7 @@ export const PasswordInput = (props) => {
         control: props.control,
         rules: { ...props.rules },
         defaultValue: props.defaultvalue,
+       
     });
 
     return (
@@ -64,13 +65,14 @@ export const PasswordInput = (props) => {
 
             <div className="relative">
                 <input
-                    onChange={onChange} // send value to hook form
+                    onChange={(e) => (props.onChange ? props.onChange(e) : onChange(e))}
                     onBlur={onBlur} // notify when input is touched/blur
                     value={value} // input value
                     name={props.name} // send down the input name
                     placeholder={props.placeholder}
                     type={show ? "text" : "password"}
                     disabled={props.disabled}
+                    onFocus={props.onFocus}
                     className={
                         props.error
                             ? `w-full text-sm bg-white disabled:bg-gray-300 rounded-md outline-none p-[14px] border border-danger ${props.className}`
