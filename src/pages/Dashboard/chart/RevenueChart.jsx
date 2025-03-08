@@ -4,7 +4,7 @@ const revenueData = [
   { month: "Jan", revenue: 2000 },
   { month: "Feb", revenue: 4500 },
   { month: "Mar", revenue: 7000 },
-  { month: "Apr", revenue: 10000 },
+  { month: "Apr", revenue: 1000 },
 ];
 
 const RevenueChart = () => {

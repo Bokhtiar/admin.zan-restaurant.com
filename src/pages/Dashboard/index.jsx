@@ -46,7 +46,7 @@ export const Dashboard = () => {
             <RevenueChart />
           </div>
         </div>
-        <div className="flex flex-col md:flex-row gap-5 mt-5">
+        <div className="flex flex-col md:flex-row gap-5 mt-5 mb-10">
           <div className="w-full ">
           <OrderStatusChart/>
           </div>
