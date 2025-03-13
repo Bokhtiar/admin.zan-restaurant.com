@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { PageHeader } from "../../components/pageHeading/PageHeading";
 import {
   ImageUpload,
+  MultipleImageUpload,
   SingleSelect,
   TextAreaInput,
   TextInput,
@@ -19,6 +20,7 @@ import { SkeletonTable } from "../../components/loading/skeleton-table";
 const CreateFood = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [multiImages, setMultiImages] = useState([]);
 
   const navigate = useNavigate();
   const {
@@ -60,10 +62,9 @@ const CreateFood = () => {
 
   // const onFormSubmit = async (data) => {
 
-
   //   const payload = {
   //     ...data,
-  //     status: data.status ? 1 : 0, 
+  //     status: data.status ? 1 : 0,
   //   };
 
   //   console.log("payload", payload);
@@ -82,9 +83,16 @@ const CreateFood = () => {
   //   setLoading(false);
   // };
 
+  const handleMultiImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length > 0) {
+      setMultiImages(files);
+    }
+  };
+
   const onFormSubmit = async (data) => {
     const formData = new FormData();
-  
+
     // `FormData` তে ডাটা যোগ করুন
     formData.append("category_id", data.category_id);
     formData.append("cook_name", data.cook_name);
@@ -94,18 +102,22 @@ const CreateFood = () => {
     formData.append("discount_price", data.discount_price);
     formData.append("about_cook", data.about_cook);
     formData.append("status", data.status ? "1" : "0");
-  
+
     // `File` টাইপ ফিল্ড গুলো আলাদাভাবে অ্যাড করুন
     if (data.cook_image) {
       formData.append("cook_image", data.cook_image);
     }
-  
-    if (data.gallary_image) {
-      formData.append("gallary_image", data.gallary_image);
-    }
-  
+
+    // if (data.gallary_images && data.gallary_images.length > 0) {
+    //   data.gallary_images.map((file,index) => formData.append(`gallary_images${[index+1]}`, file));
+    // }
+    
+    multiImages.forEach((image, index) => {
+      formData.append(`gallary_images[${index}]`, image); // Append multiple images
+      });
+
     console.log("FormData:", [...formData]);
-  
+
     try {
       setLoading(true);
       const response = await NetworkServices.Food.store(formData);
@@ -119,7 +131,6 @@ const CreateFood = () => {
     }
     setLoading(false);
   };
-  
 
   if (loading) {
     return (
@@ -224,9 +235,7 @@ const CreateFood = () => {
                 { label: 4, value: 4 },
                 { label: 5, value: 5 },
               ]}
-              onSelected={(selected) =>
-                setValue("rating", selected?.value)
-              }
+              onSelected={(selected) => setValue("rating", selected?.value)}
               placeholder="Select a Rating *"
               error={errors.rating?.message}
               label="Choose Rating *"
@@ -262,15 +271,29 @@ const CreateFood = () => {
         </div>
         {/* multiple image Upload */}
         <div className="mt-4 cursor-pointer">
-          <ImageUpload
+          {/* <MultipleImageUpload
             name="gallary_image"
             control={control}
             label="Gallary"
             file="image *"
             // required
-            onUpload={(file) => setValue("gallary_image", file)}
+            onUpload={(file) => setValue("gallary_images", file)}
             error={errors.gallary_image?.message}
-          />
+          /> */}
+          <div className="mb-6 lg:mb-2 w-full">
+            <p className="text-sm mb-1 text-gray-500">
+              Gallary Image
+              <span className="text-red-500">*</span>
+            </p>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleMultiImageChange}
+              className="file-input file-input-bordered file-input-info w-full  "
+            />
+                      
+          </div>
         </div>
         <div className="mt-4">
           <TextAreaInput

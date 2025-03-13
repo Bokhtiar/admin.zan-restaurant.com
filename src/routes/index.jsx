@@ -1,5 +1,4 @@
-import { getToken } from "../utils/helper"
-import { Product } from "../pages/product"
+
 import { Navigate } from "react-router-dom"
 // import { Dashboard } from '../components/dashboard'
 import { CategoryList } from '../pages/category/index'
@@ -13,6 +12,9 @@ import EditFood from "../pages/food/EditFood"
 import { ChefList } from "../pages/Chef"
 import CreateChef from "../pages/Chef/CreateChef"
 import EditChef from "../pages/Chef/EditChef"
+import CreatePopular from "../pages/popular/CreatePopular"
+import EditPopular from "../pages/popular/EditPopular"
+import PopularList from "../pages/popular"
 
 
 const appRoutes = [
@@ -35,16 +37,11 @@ const appRoutes = [
             /** food */
             { path:"chef", element: <ChefList/> },
             { path: "create-chef", element: <CreateChef /> },
-            { path: "edit-chef/:chefId", element: <EditChef /> },
-
-            // /** product */
-            // { path: "product", element:  <Product /> },
-            // { path: "product/category", element:  <Product /> },
-            // { path: "product/product-list", element:  <ProductList/>},
-            // { path: "product/add-product", element:  <AddProduct/>},
-         
-
-         
+            { path: "edit-chef/:chefId", element: <EditChef /> },       
+            /** popular */
+            { path:"popular", element: <PopularList/> },
+            { path: "create-popular", element: <CreatePopular/> },
+            { path: "edit-popular/:id", element: <EditPopular/> },       
        
         ],
     },
